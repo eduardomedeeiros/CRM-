@@ -1,0 +1,9 @@
+# Segredos
+.env*.local
+
+# Gerados automaticamente
+node_modules
+.next
+
+# Configurações pessoais do Claude Code neste computador
+.claude/settings.local.json

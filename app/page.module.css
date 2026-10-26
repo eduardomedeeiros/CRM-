@@ -1,0 +1,646 @@
+/* Barra de navegação */
+
+.navbar {
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+}
+
+.navInterno {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
+
+.marca {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.navLinks {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.navLink {
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto-apoio);
+  text-decoration: none;
+  border-radius: var(--raio);
+}
+
+.navLink:hover {
+  color: var(--texto);
+}
+
+.navLinkAtivo,
+.navLinkAtivo:hover {
+  color: var(--destaque);
+  background: color-mix(in srgb, var(--destaque) 8%, #ffffff);
+}
+
+.navConta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navNome {
+  font-size: 15px;
+  color: var(--texto-apoio);
+}
+
+.pagina {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cabecalho {
+  padding: 0 4px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.titulo {
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+.apoio {
+  margin-top: 12px;
+  color: var(--texto-apoio);
+  font-size: 18px;
+}
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 32px;
+}
+
+.tituloSecao {
+  font-size: 22px;
+  margin-bottom: 24px;
+}
+
+/* Painel */
+
+.painelNumeros {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.cartaoNumero {
+  padding: 24px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-top: 4px solid var(--cor, var(--texto));
+  border-radius: var(--raio);
+}
+
+.cartaoTotal {
+  --cor: var(--texto);
+}
+
+.rotuloNumero {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto-apoio);
+}
+
+.pontoEtapa {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+.numero {
+  margin-top: 8px;
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.numeroEtapa {
+  color: var(--cor);
+}
+
+/* Login */
+
+.paginaLogin {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+
+.tituloLogin {
+  font-size: 32px;
+  letter-spacing: -0.02em;
+}
+
+.apoioLogin {
+  margin-top: 8px;
+  color: var(--texto-apoio);
+}
+
+.formLogin {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.botaoLargo {
+  width: 100%;
+}
+
+.linkAlternativo {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--texto-apoio);
+}
+
+.linkAlternativo a {
+  font-weight: 600;
+  color: var(--destaque);
+  text-decoration: none;
+}
+
+.linkAlternativo a:hover {
+  color: var(--destaque-hover);
+  text-decoration: underline;
+}
+
+.sucesso {
+  margin-top: 32px;
+  padding: 16px;
+  font-weight: 600;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+/* Usuários */
+
+.acoesUsuario {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.etiquetaNeutra {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-apoio);
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+/* Formulário */
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.rotulo {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.campo {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.campo:focus {
+  outline: 2px solid var(--destaque);
+  outline-offset: -1px;
+  border-color: var(--destaque);
+}
+
+.campo[aria-invalid="true"] {
+  border-color: var(--erro);
+}
+
+.acoes {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.botao {
+  padding: 12px 22px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--destaque);
+  border: none;
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.botao:hover {
+  background: var(--destaque-hover);
+}
+
+.botao:disabled,
+.botaoSecundario:disabled,
+.botaoPerigo:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.botaoSecundario {
+  padding: 12px 22px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.botaoSecundario:hover {
+  border-color: var(--texto-apoio);
+}
+
+.botaoPerigo {
+  padding: 12px 22px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--erro);
+  border: none;
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.botaoPequeno {
+  padding: 8px 16px;
+  font-size: 15px;
+}
+
+.erro {
+  color: var(--erro);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Lista */
+
+.vazio {
+  color: var(--texto-apoio);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  padding: 18px 0;
+  border-top: 1px solid var(--borda);
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+.nomeContato {
+  font-weight: 700;
+}
+
+.detalhes {
+  margin-top: 2px;
+  color: var(--texto-apoio);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+/* Etiqueta da etapa: a cor vem de --cor, definida em cada contato. */
+.etiqueta {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 8%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--cor) 30%, #ffffff);
+  border-radius: var(--raio);
+}
+
+/* Seletor de etapa: tem a cara da etiqueta, com uma setinha indicando que dá para trocar */
+
+.blocoEtapa {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.seletorEtapa {
+  position: relative;
+  display: inline-block;
+}
+
+.seletorEtapa::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid var(--cor);
+  border-bottom: 2px solid var(--cor);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.campoEtapa {
+  appearance: none;
+  padding: 4px 30px 4px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 8%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--cor) 30%, #ffffff);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.campoEtapa:hover {
+  border-color: var(--cor);
+}
+
+.campoEtapa:focus-visible {
+  outline: 2px solid var(--cor);
+  outline-offset: 1px;
+}
+
+.campoEtapa:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.campoEtapa option {
+  color: var(--texto);
+  background: var(--superficie);
+}
+
+/* Follow-up */
+
+.followUp {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.botaoTexto:disabled {
+  color: var(--texto-apoio);
+  text-decoration: none;
+  cursor: default;
+}
+
+.painelFollowUp {
+  align-self: stretch;
+  padding: 20px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.painelFollowUp .acoes {
+  margin-top: 16px;
+}
+
+/* Anotações */
+
+.anotacoes {
+  margin-top: 10px;
+}
+
+.abrirAnotacoes {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--destaque);
+  cursor: pointer;
+  list-style: none;
+}
+
+.abrirAnotacoes::-webkit-details-marker {
+  display: none;
+}
+
+.abrirAnotacoes:hover {
+  color: var(--destaque-hover);
+  text-decoration: underline;
+}
+
+.painelAnotacoes {
+  margin-top: 16px;
+  padding: 24px;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.areaTexto {
+  display: block;
+  resize: vertical;
+  min-height: 88px;
+  line-height: 1.5;
+}
+
+.semAnotacoes {
+  margin-top: 24px;
+  color: var(--texto-apoio);
+  font-size: 15px;
+}
+
+.listaAnotacoes {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+.anotacao {
+  padding: 16px 0;
+  border-top: 1px solid var(--borda);
+}
+
+.anotacao:last-child {
+  padding-bottom: 0;
+}
+
+.topoAnotacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.dataAnotacao {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texto-apoio);
+}
+
+.acoesAnotacao {
+  display: flex;
+  gap: 16px;
+}
+
+.botaoTexto {
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--destaque);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.botaoTexto:hover {
+  color: var(--destaque-hover);
+  text-decoration: underline;
+}
+
+.campoEdicao {
+  margin-top: 8px;
+}
+
+.confirmacao {
+  margin-top: 12px;
+  padding: 16px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.perguntaConfirmacao {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.confirmacao .acoes {
+  margin-top: 12px;
+}
+
+/* Visível só para leitores de tela */
+.rotuloOculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.textoAnotacao {
+  margin-top: 4px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .pagina {
+    padding: 32px 16px 48px;
+  }
+
+  .navInterno {
+    padding: 12px 16px;
+  }
+
+  .painelNumeros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cartaoTotal {
+    grid-column: 1 / -1;
+  }
+
+  .numero {
+    font-size: 44px;
+  }
+
+  .linha {
+    flex-wrap: wrap;
+  }
+
+  .paginaLogin {
+    padding: 48px 16px;
+  }
+
+  .cartao {
+    padding: 24px 20px;
+  }
+
+  .campos {
+    grid-template-columns: 1fr;
+  }
+
+  .painelAnotacoes {
+    padding: 16px;
+  }
+}
