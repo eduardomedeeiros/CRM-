@@ -2,7 +2,7 @@ import { formatarData } from "../../lib/datas";
 import { exigirAdmin } from "../../lib/sessao";
 import { supabase } from "../../lib/supabase";
 import { aprovarUsuario, recusarUsuario } from "../actions";
-import Navbar from "../Navbar";
+import Shell from "../Shell";
 import styles from "../page.module.css";
 
 // Sempre busca os dados no banco a cada visita, nunca uma cópia guardada.
@@ -29,9 +29,7 @@ export default async function Usuarios() {
   const aprovados = usuarios?.filter((u) => u.status === "aprovado") ?? [];
 
   return (
-    <>
-      <Navbar usuario={usuarioLogado} ativa="usuarios" />
-
+    <Shell usuario={usuarioLogado} ativa="usuarios">
       <main className={styles.pagina}>
         <header className={styles.cabecalho}>
           <div>
@@ -93,6 +91,6 @@ export default async function Usuarios() {
           </ul>
         </section>
       </main>
-    </>
+    </Shell>
   );
 }

@@ -126,8 +126,8 @@ export async function criarContato(estadoAnterior, formData) {
     return { erro: "Não foi possível salvar o contato. Tente de novo.", valores };
   }
 
-  revalidatePath("/contatos");
-  return { erro: null };
+  revalidatePath("/funil");
+  return { erro: null, salvo: true };
 }
 
 // Move o contato para outra etapa do funil.
@@ -144,7 +144,8 @@ export async function mudarEtapa(contatoId, etapa) {
     return { erro: "Não foi possível mudar a etapa. Tente de novo." };
   }
 
-  revalidatePath("/contatos");
+  revalidatePath("/funil");
+  revalidatePath("/contatos/[id]", "page");
   revalidatePath("/");
   return { erro: null };
 }
@@ -175,7 +176,8 @@ export async function criarAnotacao(estadoAnterior, formData) {
     return { erro: "Não foi possível salvar a anotação. Tente de novo.", texto };
   }
 
-  revalidatePath("/contatos");
+  revalidatePath("/funil");
+  revalidatePath("/contatos/[id]", "page");
   return { erro: null };
 }
 
@@ -201,7 +203,8 @@ export async function editarAnotacao(id, textoNovo) {
     return { erro: "Não foi possível salvar a alteração. Tente de novo." };
   }
 
-  revalidatePath("/contatos");
+  revalidatePath("/funil");
+  revalidatePath("/contatos/[id]", "page");
   return { erro: null };
 }
 
@@ -224,8 +227,9 @@ export async function gerarFollowUp(contatoId) {
     return { erro: "Não encontramos esse contato. Recarregue a página e tente de novo." };
   }
 
+  let texto;
   try {
-    return { texto: await escreverFollowUp(contato) };
+    texto = await escreverFollowUp(contato);
   } catch (erro) {
     // O detalhe técnico fica só no terminal do servidor; a tela recebe uma mensagem simples.
     if (erro instanceof ApiError && (erro.status === 400 || erro.status === 403)) {
@@ -239,6 +243,16 @@ export async function gerarFollowUp(contatoId) {
     }
     return { erro: "Não foi possível gerar o follow-up agora. Tente de novo em instantes." };
   }
+
+  // Guarda o follow-up com a data, para reler depois na página do contato.
+  const { error } = await supabase.from("followups").insert({ contato_id: contatoId, texto });
+
+  if (error) {
+    return { erro: "O follow-up foi gerado, mas não foi possível guardá-lo. Tente de novo." };
+  }
+
+  revalidatePath("/contatos/[id]", "page");
+  return { erro: null };
 }
 
 // Apaga a anotação de vez no banco.
@@ -255,6 +269,7 @@ export async function excluirAnotacao(id) {
     return { erro: "Não foi possível excluir a anotação. Tente de novo." };
   }
 
-  revalidatePath("/contatos");
+  revalidatePath("/funil");
+  revalidatePath("/contatos/[id]", "page");
   return { erro: null };
 }

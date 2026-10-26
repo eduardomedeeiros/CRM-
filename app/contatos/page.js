@@ -1,108 +1,100 @@
-import { formatarData } from "../../lib/datas";
+import Link from "next/link";
+import { ETAPAS_DO_FUNIL } from "../../lib/etapas";
 import { exigirLogin } from "../../lib/sessao";
 import { supabase } from "../../lib/supabase";
-import Anotacao from "../Anotacao";
-import FormularioAnotacao from "../FormularioAnotacao";
-import FollowUp from "../FollowUp";
 import FormularioContato from "../FormularioContato";
-import Navbar from "../Navbar";
-import SeletorEtapa from "../SeletorEtapa";
+import Shell from "../Shell";
 import styles from "../page.module.css";
-
-// Sempre busca os dados no banco a cada visita, nunca uma cópia guardada.
-export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Contatos · Meu CRM",
 };
 
-export default async function Contatos() {
+export default async function Contatos({ searchParams }) {
   const usuarioLogado = await exigirLogin();
 
-  // Traz cada contato já com as anotações dele, das mais novas para as mais antigas.
-  const { data: contatos, error } = await supabase
-    .from("contatos")
-    .select("id, nome, email, telefone, etapa, anotacoes(id, texto, criado_em)")
-    .order("criado_em", { ascending: false })
-    .order("id", { ascending: false })
-    .order("criado_em", { referencedTable: "anotacoes", ascending: false });
+  // Tira os caracteres que o filtro do banco usa como comando, para a busca valer só como texto.
+  const { busca } = await searchParams;
+  const termo = String(busca ?? "").replace(/[%_,()"\\*]/g, " ").trim().slice(0, 100);
+
+  const { data: encontrados, error } = termo
+    ? await supabase
+        .from("contatos")
+        .select("id, nome, email, telefone, etapa")
+        .or(`nome.ilike.%${termo}%,email.ilike.%${termo}%,telefone.ilike.%${termo}%`)
+        .order("nome")
+        .limit(50)
+    : { data: null, error: null };
 
   return (
-    <>
-      <Navbar usuario={usuarioLogado} ativa="contatos" />
-
+    <Shell usuario={usuarioLogado} ativa="contatos">
       <main className={styles.pagina}>
         <header className={styles.cabecalho}>
           <div>
             <h1 className={styles.titulo}>Contatos</h1>
-            <p className={styles.apoio}>Seus contatos e oportunidades em um só lugar.</p>
+            <p className={styles.apoio}>Busque um contato ou cadastre um novo para acompanhar no funil.</p>
           </div>
         </header>
 
         <section className={styles.cartao}>
-          <h2 className={styles.tituloSecao}>Novo contato</h2>
-          <FormularioContato />
-        </section>
+          <h2 className={styles.tituloSecao}>Buscar contato</h2>
+          <form className={styles.formBusca} role="search">
+            <label className={styles.rotuloOculto} htmlFor="busca">
+              Nome, email ou telefone
+            </label>
+            <input
+              className={styles.campo}
+              id="busca"
+              name="busca"
+              type="search"
+              placeholder="Nome, email ou telefone"
+              autoComplete="off"
+              defaultValue={termo}
+            />
+            <button className={styles.botao} type="submit">
+              Buscar
+            </button>
+          </form>
 
-        <section className={styles.cartao}>
-          <h2 className={styles.tituloSecao}>Todos os contatos</h2>
+          {error && <p className={styles.erro}>Não foi possível buscar agora. Tente de novo.</p>}
 
-          {error && <p className={styles.erro}>Não foi possível carregar os contatos.</p>}
-
-          {!error && contatos.length === 0 && (
-            <p className={styles.vazio}>Nenhum contato cadastrado ainda.</p>
+          {encontrados && encontrados.length === 0 && (
+            <p className={styles.semResultado} role="status">
+              Nenhum contato encontrado para &ldquo;{termo}&rdquo;. Confira a grafia ou busque por outra parte do
+              nome, do email ou do telefone.
+            </p>
           )}
 
-          {!error && contatos.length > 0 && (
-            <ul className={styles.lista}>
-              {contatos.map((contato) => (
-                <li className={styles.item} key={contato.id}>
-                  <div className={styles.linha}>
-                    <div>
-                      <p className={styles.nomeContato}>{contato.nome}</p>
-                      <p className={styles.detalhes}>
+          {encontrados && encontrados.length > 0 && (
+            <ul className={styles.listaBusca}>
+              {encontrados.map((contato) => (
+                <li key={contato.id}>
+                  <Link className={styles.resultado} href={`/contatos/${contato.id}`}>
+                    <span>
+                      <span className={styles.nomeContato}>{contato.nome}</span>
+                      <span className={styles.detalhes}>
                         {[contato.email, contato.telefone].filter(Boolean).join(" · ") ||
                           "Sem email ou telefone"}
-                      </p>
-                    </div>
-                    {/* A chave inclui a etapa para o seletor acompanhar mudanças feitas em outro lugar. */}
-                    <SeletorEtapa
-                      key={`${contato.id}-${contato.etapa}`}
-                      contatoId={contato.id}
-                      etapa={contato.etapa}
-                    />
-                  </div>
-
-                  <FollowUp contatoId={contato.id} />
-
-                  <details className={styles.anotacoes}>
-                    <summary className={styles.abrirAnotacoes}>
-                      Anotações ({contato.anotacoes.length})
-                    </summary>
-                    <div className={styles.painelAnotacoes}>
-                      <FormularioAnotacao contatoId={contato.id} />
-
-                      {contato.anotacoes.length === 0 ? (
-                        <p className={styles.semAnotacoes}>Nenhuma anotação ainda.</p>
-                      ) : (
-                        <ul className={styles.listaAnotacoes}>
-                          {contato.anotacoes.map((anotacao) => (
-                            <Anotacao
-                              key={anotacao.id}
-                              anotacao={anotacao}
-                              data={formatarData(anotacao.criado_em)}
-                            />
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </details>
+                      </span>
+                    </span>
+                    <span
+                      className={styles.etiqueta}
+                      style={{ "--cor": `var(--etapa-${contato.etapa.replace(" ", "-")})` }}
+                    >
+                      {ETAPAS_DO_FUNIL.find((e) => e.valor === contato.etapa)?.nome ?? contato.etapa}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
         </section>
+
+        <section className={styles.cartao}>
+          <h2 className={styles.tituloSecao}>Novo contato</h2>
+          <FormularioContato />
+        </section>
       </main>
-    </>
+    </Shell>
   );
 }

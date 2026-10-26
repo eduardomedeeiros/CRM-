@@ -1,12 +1,18 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import Link from "next/link";
+import { useActionState, useEffect, useState } from "react";
 import { criarContato } from "./actions";
 import styles from "./page.module.css";
 
-export default function FormularioContato() {
+// aoSalvar (opcional): chamado depois que o contato é salvo, ex.: para fechar a janela do Funil.
+export default function FormularioContato({ aoSalvar }) {
   const [estado, enviar, salvando] = useActionState(criarContato, { erro: null });
   const [erroNome, setErroNome] = useState(null);
+
+  useEffect(() => {
+    if (estado.salvo) aoSalvar?.();
+  }, [estado, aoSalvar]);
 
   // Bloqueia o envio ainda no navegador quando o nome está vazio.
   function aoEnviar(evento) {
@@ -75,6 +81,12 @@ export default function FormularioContato() {
         {mensagem && (
           <p className={styles.erro} id="erro-formulario" role="alert">
             {mensagem}
+          </p>
+        )}
+        {/* A lista agora fica no Funil: avisa que salvou e leva até lá. */}
+        {!mensagem && estado.salvo && (
+          <p className={styles.salvo} role="status">
+            Contato salvo. <Link href="/funil">Ver no funil</Link>
           </p>
         )}
       </div>

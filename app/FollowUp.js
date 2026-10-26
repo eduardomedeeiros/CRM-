@@ -24,29 +24,52 @@ async function copiarTexto(texto) {
   }
 }
 
-// Botão "Gerar follow-up" de um contato, com a mensagem pronta para copiar.
-export default function FollowUp({ contatoId }) {
-  const [texto, setTexto] = useState(null);
+// Botão "Gerar follow-up com IA" e a lista dos follow-ups já gerados (guardados no banco).
+export default function FollowUp({ contatoId, followups }) {
   const [erro, setErro] = useState(null);
-  const [copiado, setCopiado] = useState(false);
   const [escrevendo, iniciar] = useTransition();
 
   function gerar() {
     setErro(null);
-    setCopiado(false);
     iniciar(async () => {
       const resultado = await gerarFollowUp(contatoId);
-      if (resultado.erro) {
-        setErro(resultado.erro);
-      } else {
-        setTexto(resultado.texto);
-      }
+      if (resultado.erro) setErro(resultado.erro);
     });
   }
 
+  return (
+    <div className={styles.followUp}>
+      <div className={styles.acoesFollowUp}>
+        <button className={styles.botao} type="button" onClick={gerar} disabled={escrevendo}>
+          {escrevendo ? "Escrevendo..." : "Gerar follow-up com IA"}
+        </button>
+        {erro && (
+          <p className={styles.erro} role="alert">
+            {erro}
+          </p>
+        )}
+      </div>
+
+      {followups.length === 0 ? (
+        <p className={styles.semAnotacoes}>Nenhum follow-up gerado ainda.</p>
+      ) : (
+        <ul className={styles.listaAnotacoes} aria-live="polite">
+          {followups.map((followup) => (
+            <ItemFollowUp key={followup.id} followup={followup} />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function ItemFollowUp({ followup }) {
+  const [copiado, setCopiado] = useState(false);
+  const [erro, setErro] = useState(null);
+
   async function copiar() {
     setErro(null);
-    if (await copiarTexto(texto)) {
+    if (await copiarTexto(followup.texto)) {
       setCopiado(true);
       setTimeout(() => setCopiado(false), 2000);
     } else {
@@ -55,27 +78,19 @@ export default function FollowUp({ contatoId }) {
   }
 
   return (
-    <div className={styles.followUp}>
-      <button className={styles.botaoTexto} type="button" onClick={gerar} disabled={escrevendo}>
-        {escrevendo ? "Escrevendo..." : texto ? "Gerar outro follow-up" : "Gerar follow-up"}
-      </button>
-
+    <li className={styles.anotacao}>
+      <div className={styles.topoAnotacao}>
+        <p className={styles.dataAnotacao}>{followup.data}</p>
+        <button className={styles.botaoTexto} type="button" onClick={copiar}>
+          {copiado ? "Copiado!" : "Copiar"}
+        </button>
+      </div>
+      <p className={styles.textoAnotacao}>{followup.texto}</p>
       {erro && (
         <p className={styles.erro} role="alert">
           {erro}
         </p>
       )}
-
-      {texto && (
-        <div className={styles.painelFollowUp} aria-live="polite">
-          <p className={styles.textoAnotacao}>{texto}</p>
-          <div className={styles.acoes}>
-            <button className={`${styles.botao} ${styles.botaoPequeno}`} type="button" onClick={copiar}>
-              {copiado ? "Copiado!" : "Copiar"}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    </li>
   );
 }
